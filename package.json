@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env DB_ENV=testing jest --watch --verbose"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,14 @@
   },
   "homepage": "https://github.com/Build-week-Chef-portfolio-WebPT5/chef_portfolio_backend#readme",
   "dependencies": {
+    "cross-env": "^5.2.1",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "helmet": "^3.21.0",
+    "jest": "^24.9.0",
     "knex": "^0.19.3",
     "nodemon": "^1.19.2",
-    "sqlite3": "^4.1.0"
+    "sqlite3": "^4.1.0",
+    "supertest": "^4.0.2"
   }
 }
