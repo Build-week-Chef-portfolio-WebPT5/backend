@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //TO CREATE A NEW CHEF ACCOUNT
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
   let chefInfo = req.body;
 
   //hashing user password
@@ -34,6 +34,25 @@ router.post('/', (req, res) => {
     })
     .catch(err => {
       res.status(400).json(err.message);
+    });
+});
+
+//USER LOGIN REQUEST
+router.post('/login', (req, res) => {
+  //deconstructing body
+  let { username, password } = req.body;
+
+  DB.findChefByUser(username)
+    .then(user => {
+      //if the user exist and the password matches
+      if (user && bcrypt.compareSync(password, user.password)) {
+        res.status(200).json({ message: `Welcome ${user.username}!` });
+      } else {
+        res.status(401).json({ message: 'Invalid credentials' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: err });
     });
 });
 
