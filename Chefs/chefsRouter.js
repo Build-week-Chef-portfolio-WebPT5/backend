@@ -4,6 +4,10 @@ const DB = require('./chefsModel.js');
 //importing bcrypt to hash password
 const bcrypt = require('bcryptjs');
 
+//Importing JWT and secret file
+const jwt = require('jsonwebtoken');
+const secrets = require('../config/secrets');
+
 // TO FIND A SPECIFIC CHEFS PAGE
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -46,7 +50,10 @@ router.post('/login', (req, res) => {
     .then(user => {
       //if the user exist and the password matches
       if (user && bcrypt.compareSync(password, user.password)) {
-        res.status(200).json({ message: `Welcome ${user.username}!` });
+        //creating jwt token the genToken func is at the bottom
+        const token = genToken(user);
+        //pasing toekn with message for testing
+        res.status(200).json({ message: `Welcome ${user.username}!`, token });
       } else {
         res.status(401).json({ message: 'Invalid credentials' });
       }
@@ -78,5 +85,20 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json(err.message);
   }
 });
+
+//function to generate token for
+//authenticating users while navigating to other pages
+//without having user to enter password everytime
+function genToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username
+  };
+
+  const options = {
+    expiresIn: '1d'
+  };
+  return jwt.sign(payload, secrets.jwtSecret, options);
+}
 
 module.exports = router;
