@@ -32,7 +32,7 @@ router.put("/:id", async (req, res) => {
     const update = await DB.updateRecipe(id, updatedInfo);
     res.status(200).json(update);
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 
@@ -43,7 +43,7 @@ router.delete("/:id", async (req, res) => {
     await DB.removeRecipe(id);
     res.status(204);
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 
