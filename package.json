@@ -29,7 +29,9 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.3",
     "nodemon": "^1.19.2",
-    "sqlite3": "^4.1.0",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
     "supertest": "^4.0.2"
   }
 }
