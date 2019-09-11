@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
 const verify = require("../auth/restricted-middleware");
 
-// TO FIND A SPECIFIC CHEFS PAGE
+// TO FIND A SPECIFIC CHEFS PAGE (AFTER LOGIN)
 router.get("/:id", verify, async (req, res) => {
   const { id } = req.params;
   try {

@@ -1,6 +1,6 @@
 //Importing JWT and secret file
-const jwt = require('jsonwebtoken');
-const secrets = require('../config/secrets');
+const jwt = require("jsonwebtoken");
+const secrets = require("../config/secrets");
 
 module.exports = (req, res, next) => {
   //getting the token from the headers
@@ -11,7 +11,8 @@ module.exports = (req, res, next) => {
     jwt.verify(token, secrets.jwtSecret, (err, decodedToken) => {
       if (err) {
         //invalid token
-        res.status(401).json({ message: 'invalid token!' });
+        console.log(err);
+        res.status(400).json({ message: "invalid token!" });
       } else {
         //if there is a token and no error call next
         //for normal request
@@ -24,6 +25,6 @@ module.exports = (req, res, next) => {
     });
     //if there is no token send message
   } else {
-    res.status(401).json({ message: 'Missing token in headers' });
+    res.status(401).json({ message: "Missing token in headers" });
   }
 };
