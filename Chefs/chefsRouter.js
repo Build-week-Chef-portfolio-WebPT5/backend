@@ -20,7 +20,7 @@ router.get("/:id", verify, async (req, res) => {
       res.status(404).json({ message: "No account associated with this ID." });
     }
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 
@@ -33,13 +33,25 @@ router.post("/register", (req, res) => {
   //passing the hash password to the body to store in db
   chefInfo.password = hash;
 
-  DB.createChef(chefInfo)
-    .then(idArray => {
-      res.status(201).json({ chefId: idArray[0] });
-    })
-    .catch(err => {
-      res.status(400).json(err.message);
-    });
+  let { username, name, city, state, email } = chefInfo;
+
+  if (username && name && city && state && email) {
+    DB.createChef(chefInfo)
+      .then(idArray => {
+        if (!idArray) {
+          res
+            .status(400)
+            .json({ message: "Internal error. Please try again." });
+        } else {
+          res.status(201).json({ chefId: idArray[0] });
+        }
+      })
+      .catch(err => {
+        res.status(500).json(err.message);
+      });
+  } else {
+    res.status(400).json({ message: "Lacking required information." });
+  }
 });
 
 //USER LOGIN REQUEST
@@ -68,11 +80,12 @@ router.post("/login", (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const updatedInfo = req.body;
+
   try {
     const update = await DB.updateChef(id, updatedInfo);
     res.status(200).json(update);
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 
@@ -83,7 +96,7 @@ router.delete("/:id", async (req, res) => {
     await DB.deleteChef(id);
     res.status(204);
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 
