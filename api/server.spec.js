@@ -1,9 +1,13 @@
 const request = require("supertest");
 const server = require("./server.js");
 const DB = require("../data/db-config.js");
+const chefModel = require("../Chefs/chefsModel.js");
 
 describe("Chef Authorized Routes", () => {
   let token;
+  // it creates a fresh user for each test
+  // if the beforeEach fails, unless err says otherwise its
+  // likely the /register endpoint post request malfunctioning
   beforeEach(async done => {
     // clears DB so /api/chefs/1 has matching data
     await DB("chefs").truncate();
@@ -24,7 +28,7 @@ describe("Chef Authorized Routes", () => {
       });
   });
 
-  describe("GET request to /api/chefs/1", () => {
+  describe("GET request to /api/chefs/:id", () => {
     //should refer to the same row every time because of beforeEach
     it("should return status 401 without JWT", () => {
       return request(server)
@@ -40,6 +44,67 @@ describe("Chef Authorized Routes", () => {
         .then(res => {
           expect(res.statusCode).toBe(200);
         });
+    });
+  });
+
+  describe("POST request to /api/chefs/login", () => {
+    it("should return status 401 without valid user info", () => {
+      return request(server)
+        .post("/api/chefs/login")
+        .send({
+          username: "fakeusername",
+          password: "fakepass"
+        })
+        .expect(401);
+    });
+    it("should return status 200 with valid user info", () => {
+      return request(server)
+        .post("/api/chefs/login")
+        .send({
+          username: "user",
+          password: "pw"
+        })
+        .expect(200);
+    });
+    it("should return a JSON object", () => {
+      return request(server)
+        .post("/api/chefs/login")
+        .send({
+          username: "user",
+          password: "pw"
+        })
+        .expect("Content-Type", /json/);
+    });
+  });
+  describe("PUT request to /api/chefs/:id", () => {
+    // it("should return status 400 without updated info", () => {
+    //   return (
+    //     request(server)
+    //       .put("/api/chefs/1")
+    //       .send({
+
+    //       })
+    //       //returns count of rows updated "0"
+    //       .expect(200, "0")
+    //   );
+    // });
+    it("should return status 200 changed content", () => {
+      return (
+        request(server)
+          .put("/api/chefs/1")
+          .send({
+            username: "updated"
+          })
+          //returns count of rows updated "1"
+          .expect(200, "1")
+      );
+    });
+  });
+  describe("DELETE request to /api/chefs/:id", () => {
+    it("should return status 404 with invalid id param", async () => {
+      return request(server)
+        .delete("/api/chefs/:1")
+        .expect(204);
     });
   });
 });
