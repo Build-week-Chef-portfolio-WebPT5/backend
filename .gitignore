@@ -86,3 +86,6 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+#Ignore to prevent conflict during deployment
+package-lock.json
