@@ -97,7 +97,7 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await DB.deleteChef(id);
-    res.status(204).send(res.body);
+    res.status(204).end();
   } catch (err) {
     res.status(500).json(err.message);
   }
