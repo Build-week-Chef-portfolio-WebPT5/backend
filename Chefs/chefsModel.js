@@ -2,16 +2,21 @@ const DB = require('../data/db-config.js');
 
 module.exports = {
   findChef,
+  findChefById,
   findChefByUser,
   createChef,
   updateChef,
   deleteChef
 };
 
-function findChef(id) {
+function findChefById(id) {
   return DB('chefs')
     .where({ id })
     .first();
+}
+
+function findChef(id) {
+  return DB('chefs');
 }
 
 //request for login

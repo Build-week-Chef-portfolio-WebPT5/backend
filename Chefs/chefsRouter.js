@@ -1,23 +1,37 @@
-const router = require("express").Router();
-const DB = require("./chefsModel.js");
+const router = require('express').Router();
+const DB = require('./chefsModel.js');
 
 //importing bcrypt to hash password
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
 //Importing JWT and secret file
-const jwt = require("jsonwebtoken");
-const secrets = require("../config/secrets");
-const verify = require("../auth/restricted-middleware");
+const jwt = require('jsonwebtoken');
+const secrets = require('../config/secrets');
+const verify = require('../auth/restricted-middleware');
 
-// TO FIND A SPECIFIC CHEFS PAGE
-router.get("/:id", verify, async (req, res) => {
-  const { id } = req.params;
+// LIST OF CURRENT CHEF/USERS
+router.get('/', verify, async (req, res) => {
   try {
-    const chef = await DB.findChef(id);
+    const chef = await DB.findChef();
     if (chef) {
       res.status(200).json(chef);
     } else {
-      res.status(404).json({ message: "No account associated with this ID." });
+      res.status(404).json({ message: 'No account associated with this ID.' });
+    }
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
+// TO FIND A SPECIFIC CHEFS PAGE
+router.get('/:id', verify, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const chef = await DB.findChefById(id);
+    if (chef) {
+      res.status(200).json(chef);
+    } else {
+      res.status(404).json({ message: 'No account associated with this ID.' });
     }
   } catch (err) {
     res.status(400).json(err.message);
@@ -25,7 +39,7 @@ router.get("/:id", verify, async (req, res) => {
 });
 
 //TO CREATE A NEW CHEF ACCOUNT
-router.post("/register", (req, res) => {
+router.post('/register', (req, res) => {
   let chefInfo = req.body;
 
   //hashing user password
@@ -43,7 +57,7 @@ router.post("/register", (req, res) => {
 });
 
 //USER LOGIN REQUEST
-router.post("/login", (req, res) => {
+router.post('/login', (req, res) => {
   //deconstructing body
   let { username, password } = req.body;
 
@@ -56,7 +70,7 @@ router.post("/login", (req, res) => {
         //pasing toekn with message for testing
         res.status(200).json({ message: `Welcome ${user.username}!`, token });
       } else {
-        res.status(401).json({ message: "Invalid credentials" });
+        res.status(401).json({ message: 'Invalid credentials' });
       }
     })
     .catch(err => {
@@ -65,7 +79,7 @@ router.post("/login", (req, res) => {
 });
 
 //UPDATES CHEFS' ACCOUNT INFO.. RETURNS NUMBER OF ROWS UPDATED
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const updatedInfo = req.body;
   try {
@@ -77,7 +91,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //DELETES CHEF FROM DATABASE USING ID
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await DB.deleteChef(id);
@@ -97,7 +111,7 @@ function genToken(user) {
   };
 
   const options = {
-    expiresIn: "1d"
+    expiresIn: '1d'
   };
   return jwt.sign(payload, secrets.jwtSecret, options);
 }
