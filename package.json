@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Proposal",
   "main": "index.js",
-
   "engines": {
     "node": "11.12.0",
     "npm": "6.7.0"
@@ -26,6 +25,7 @@
   "homepage": "https://github.com/Build-week-Chef-portfolio-WebPT5/chef_portfolio_backend#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "helmet": "^3.21.0",
