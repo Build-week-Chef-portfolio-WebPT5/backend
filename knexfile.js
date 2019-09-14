@@ -30,10 +30,19 @@ module.exports = {
     migrations: {
       directory: './data/migrations'
     },
+    seeds: {
+      directory: "./data/seeds"
+    },
     // I do not think we will need seeds because the testing method we will use truncates beforeEach
     // seeds: {
     //   directory: "./data/seeds"
     // },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    pool: {
+      afterCreate: (conn, done) => {
+        // runs after a connection is made to the sqlite engine
+        conn.run("PRAGMA foreign_keys = ON", done); // turn on FK enforcement
+      }
+    }
   }
 };
