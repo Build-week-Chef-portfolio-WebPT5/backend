@@ -1,7 +1,7 @@
 const request = require("supertest");
-const server = require("./server.js");
+const server = require("../api/server.js");
 const DB = require("../data/db-config.js");
-const chefModel = require("../Chefs/chefsModel.js");
+// const chefModel = require("./chefsModel.js");
 
 describe("Chef Authorized Routes", () => {
   let token;

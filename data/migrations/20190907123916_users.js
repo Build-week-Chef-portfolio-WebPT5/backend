@@ -28,7 +28,9 @@ exports.up = function(knex) {
         .notNullable()
         .unsigned()
         .references("id")
-        .inTable("chefs");
+        .inTable("chefs")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
       tbl
         .text("recipe_img")
         .unique()
