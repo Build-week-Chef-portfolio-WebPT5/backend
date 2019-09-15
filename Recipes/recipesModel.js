@@ -1,4 +1,4 @@
-const DB = require("../data/db-config");
+const DB = require('../data/db-config');
 
 module.exports = {
   getChefRecipes,
@@ -7,22 +7,24 @@ module.exports = {
   removeRecipe
 };
 
-function getChefRecipes(chefId) {
-  return DB("recipes").where("chef_id", "=", `${chefId}`);
+function getChefRecipes(chefName) {
+  return DB('recipes')
+    .where('username', '=', `${chefName}`)
+    .first();
 }
 
 function addRecipe(recipeInfo) {
-  return DB("recipes").insert(recipeInfo);
+  return DB('recipes').insert(recipeInfo);
 }
 
 function updateRecipe(id, changes) {
-  return DB("recipes")
+  return DB('recipes')
     .where({ id })
     .update(changes);
 }
 
 function removeRecipe(id) {
-  return DB("recipes")
+  return DB('recipes')
     .where({ id })
     .del();
 }
