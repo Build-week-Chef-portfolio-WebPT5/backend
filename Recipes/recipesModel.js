@@ -7,10 +7,8 @@ module.exports = {
   removeRecipe
 };
 
-function getChefRecipes(chefName) {
-  return DB('recipes')
-    .where('username', '=', `${chefName}`)
-    .first();
+function getChefRecipes(chefId) {
+  return DB('recipes').where('chef_id', '=', `${chefId}`);
 }
 
 function addRecipe(recipeInfo) {
