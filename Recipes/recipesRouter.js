@@ -4,9 +4,12 @@ const DB = require('./recipesModel.js');
 
 const restricted = require('../auth/restricted-middleware');
 
-//FINDS RECIPES FOR ONE CHEF
-router.get('/:id', restricted, async (req, res) => {
-  const id = req.params.id;
+//FINDS RECIPES FOR ONE CHEF with authentication
+router.get('/myrecipes', restricted, async (req, res) => {
+  // const id = req.params.id;
+  //getting the user ID from the decoded token to
+  //show only the post from this user
+  const id = req.decodedJwt.subject - 1;
   try {
     const recipes = await DB.getChefRecipes(id);
     res.status(200).json(recipes);
