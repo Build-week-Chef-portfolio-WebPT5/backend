@@ -7,11 +7,22 @@ const restricted = require('../auth/restricted-middleware');
 //FINDS RECIPES FOR ONE CHEF with authentication
 router.get('/myrecipes', restricted, async (req, res) => {
   // const id = req.params.id;
-  //getting the user ID from the decoded token to
-  //show only the post from this user
+  //getting the user ID from the decoded token
+  //from the(restricted mitddleware) to
+  //show only the post from current user only
   const id = req.decodedJwt.subject - 1;
   try {
     const recipes = await DB.getChefRecipes(id);
+    res.status(200).json(recipes);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
+//Shows all recipes for a user without auth
+router.get('/', async (req, res) => {
+  try {
+    const recipes = await DB.getAllRecipes();
     res.status(200).json(recipes);
   } catch (err) {
     res.status(400).json(err.message);
