@@ -1,10 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const DB = require("./recipesModel.js");
+const DB = require('./recipesModel.js');
 
-//FINDS RECIPES FOR ONE CHEF
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
+const restricted = require('../auth/restricted-middleware');
+
+//FINDS RECIPES FOR ONE CHEF with authentication
+router.get('/myrecipes', restricted, async (req, res) => {
+  // const id = req.params.id;
+  //getting the user ID from the decoded token
+  //from the(restricted mitddleware) to
+  //show only the post from current user only
+  const id = req.decodedJwt.subject - 1;
   try {
     const recipes = await DB.getChefRecipes(id);
     res.status(200).json(recipes);
@@ -13,8 +19,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//Shows all recipes for a user without auth
+router.get('/', async (req, res) => {
+  try {
+    const recipes = await DB.getAllRecipes();
+    res.status(200).json(recipes);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
 //ADDS RECIPE TO THE DB, CHEF ID MUST BE SUPPLIED IN THE BODY OF REQUEST
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const recipeInfo = req.body;
   try {
     const recipe = await DB.addRecipe(recipeInfo);
@@ -25,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 //UPDATES RECIPE BY ID, RETURNS COUNT OF ROWS UPDATED
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const updatedInfo = req.body;
   try {
@@ -37,7 +53,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //REMOVES RECIPE BY RECIPE ID
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await DB.removeRecipe(id);
