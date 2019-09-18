@@ -67,8 +67,9 @@ router.post('/login', (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         //creating jwt token the genToken func is at the bottom
         const token = genToken(user);
+        const userId = user.id;
         //pasing toekn with message for testing
-        res.status(200).json({ message: `Welcome ${user.username}!`, token });
+        res.status(200).json({ message: `Welcome ${user.username}!`, userId });
       } else {
         res.status(401).json({ message: 'Invalid credentials' });
       }

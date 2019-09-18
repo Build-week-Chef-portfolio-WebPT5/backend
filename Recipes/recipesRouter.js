@@ -32,6 +32,8 @@ router.get('/', async (req, res) => {
 //ADDS RECIPE TO THE DB, CHEF ID MUST BE SUPPLIED IN THE BODY OF REQUEST
 router.post('/', async (req, res) => {
   const recipeInfo = req.body;
+  // const id = req.decodedJwt.subject;
+  // console.log(id);
   try {
     const recipe = await DB.addRecipe(recipeInfo);
     res.status(201).json(recipe);
