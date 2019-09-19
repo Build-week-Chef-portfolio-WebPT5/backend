@@ -10,7 +10,7 @@ router.get('/myrecipes', restricted, async (req, res) => {
   //getting the user ID from the decoded token
   //from the(restricted mitddleware) to
   //show only the post from current user only
-  const id = req.decodedJwt.subject - 1;
+  const id = req.decodedJwt.subject;
   try {
     const recipes = await DB.getChefRecipes(id);
     res.status(200).json(recipes);
