@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-//ADDS RECIPE TO THE DB, CHEF ID MUST BE SUPPLIED IN THE BODY OF REQUEST
+//ADDS RECIPE TO THE DB, CHEF ID MUST BE INCLUDED IN THE BODY OF REQUEST
 router.post('/', async (req, res) => {
   const recipeInfo = req.body;
   try {

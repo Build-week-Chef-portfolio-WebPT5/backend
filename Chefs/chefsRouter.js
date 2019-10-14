@@ -68,10 +68,11 @@ router.post('/login', (req, res) => {
         //creating jwt token the genToken func is at the bottom
         const token = genToken(user);
         const userId = user.id;
+        const userName = user.username;
         //pasing toekn with message for testing
         res
           .status(200)
-          .json({ message: `Welcome ${user.username}!`, userId, token });
+          .json({ message: `Welcome ${userName}!`, userName, userId, token });
       } else {
         res.status(401).json({ message: 'Invalid credentials' });
       }
